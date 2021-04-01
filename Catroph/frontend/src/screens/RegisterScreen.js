@@ -100,5 +100,5 @@ export default function RegisterScreen(props) {
                 </div>
             </form>
         </div>
-    )
+    );
 }

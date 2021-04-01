@@ -24,7 +24,7 @@ export default function CartScreen(props) {
 
     const checkoutHandler = () => {
         // direct user to sigin screen
-        props.history.push('sigin?redirect=shipping');
+        props.history.push('/signin?redirect=shipping');
     };
 
     return (

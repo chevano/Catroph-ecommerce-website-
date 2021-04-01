@@ -106,6 +106,9 @@ button.block {
   width: 100%;
 }
 
+button.small {
+  font-size: 1.2rem;
+}
 /* Header */
 header a {
   color: #ffffff;
@@ -234,6 +237,11 @@ img.large {
   background-color: #ffe0e0e0;
 }
 
+.alert-success {
+  color: #20a020;
+  background-color: #eeffe0;
+}
+
 /* Form */
 .form {
   max-width: 60rem;
@@ -248,7 +256,6 @@ img.large {
 
 .form label {
   margin: 1rem 0; /* Creates a space between label and input box */
-  display: block; /* Puts label on a new line */
 }
 
 /* Dropdown */
@@ -272,4 +279,38 @@ img.large {
 
 .dropdown:hover .dropdown-content {
   display: block; /* Allows us to see the content of the dropdown when mouse hovers over it */
+}
+
+/* Checkout Steps */
+.checkout-steps > div { /* target the direct divs of checkout steps*/
+  border-top: 0.3rem #c0c0c0 solid;
+  color: #c0c0c0;
+  flex: 1;
+  padding: 1rem;
+}
+
+.checkout-steps > div.active {
+  border-top-color: #f08000;
+  color: #f08000;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table tbody tr:nth-of-type(odd) { /* targets every odd row in the table */
+  background-color: #f4f4f4;
+}
+
+.table td,
+.table th {
+  text-align: left;
+  border: 0.1rem solid #e4e4e4;
+  padding: 0.5rem;
+}
+
+.table button {
+  margin: 0 0.2rem;
 }
