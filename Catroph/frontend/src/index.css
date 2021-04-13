@@ -1,0 +1,397 @@
+/* Makes the root id full height which is located inside public/index.html */
+#root {
+  height: 100%;
+}
+
+html {
+  font-size: 62.5%;  /* 1rem = 16px = 100%, 1px = 6.25% */
+  box-sizing: border-box;  /* allows us to include the padding and border in an element's total width and height. */
+}
+
+body {
+  margin: 0;
+  height: 100vh; /* height is set to the maximum viewport height */
+  font-size: 1.6rem;  /* 1.6rem = 25.6px = 160% */
+  font-family: Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Layout */
+.grid-container {
+  display: grid;
+  grid-template-areas: /* Used to specify areas within the grid layout */
+    'header'
+    'main'
+    'footer';
+  grid-template-columns: 1fr; /* Specifies the number as well as the widths of the columns in a grid layout */
+  grid-template-rows: 5rem 1fr 5rem; /* Specifies the number as well as the heights of the rows in a grid layout */
+  height: 100%;
+}
+
+header {
+  grid-area: header;  /* naming the grid items */
+  background-color: #142850;
+}
+
+main {
+  grid-area: main; /* naming the grid items */
+  padding: 1rem;
+}
+
+footer {
+  grid-area: footer; /* naming the grid items */
+  background-color:#142850;
+  color: #ffffff;
+}
+
+/* Common Sections*/
+h1 {
+  font-size: 1.8rem;
+  padding: 1rem 0;
+}
+h2 {
+  font-size: 1.6rem;
+  padding: 1rem 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: #FFC93C;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+li {
+  margin-top: 1rem;
+}
+
+input,
+select,
+textarea,
+button {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 0.1rem #a4a4a4 solid;
+  font-size: 1.6rem;  /* 1.6rem = 25.6px = 160% */
+  font-family: Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  background-color: #f8f8f8;
+  cursor: pointer;
+}
+
+input:hover,
+select:hover,
+textarea:hover,
+button:hover {
+  border: 0.1rem #404040 solid;
+}
+
+button.primary {
+  background-color: #f0c040;
+}
+
+button.block {
+  width: 100%;
+}
+
+button.small {
+  font-size: 1.2rem;
+}
+/* Header */
+header a {
+  color: #ffffff;
+  padding: 1rem;
+}
+
+a.brand {           /* Anchor that has a brand class */
+  color: #ffffff;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.badge {
+  background-color: #ff1e56;
+  color: #f1f3f4;
+  border-radius: 50%;
+  padding: 0.2rem 0.7rem;
+  font-size: 1.4rem;
+  margin-left: 0.2rem;
+}
+.row {              /* Align items next to each other */
+  display: flex;   /* The element behaves like a block element and lays out its content according to the flexbox model */
+  flex-wrap: wrap; /* places the content of the screen to a new line when the amount of items exceeds the width of the screen*/
+  justify-content: space-between; /* Adds space between each content */
+  align-items: center;
+}
+
+.row.center {       /* Adds subclass center to row */
+  justify-content: center;
+}
+
+.row.top {
+  align-items: flex-start; /* All items will be set to the top of the page by default*/
+}
+
+.row.start {
+  justify-content: flex-start;
+}
+
+.col-1 {
+  flex: 1 1 25rem;
+}
+
+.col-2 {
+  flex: 2 1 50rem;
+}
+
+.col-3 {
+  flex: 32 1 75rem;
+}
+
+.min-30rem {
+  min-width: 30rem;
+}
+
+.p-1 {
+  padding: 1rem;
+}
+
+/* Image */
+img {
+  border-radius: 0.5rem;
+}
+
+img.small {
+  max-width: 5rem;
+  width: 100;
+}
+
+img.medium {
+  max-width: 29rem;
+  width: 100%;
+}
+
+img.large {
+  width: 100%;
+}
+
+/* Card */
+.card {
+  border: 0.1rem #c0c0c0 solid;
+  background-color: #f8f8f8;
+  border-radius: 0.5rem;
+  margin: 1rem;
+}
+.card-body {
+  padding: 1rem;
+}
+.card-body > * {       /* All direct child of card-body (All elements inside card-body */
+  margin-bottom: 0.5rem;
+}
+.price {
+  font-size: 1.6rem;
+  padding: .8rem;
+}
+/* Rating */
+
+.rating {
+  padding: .8rem;
+  padding-top: 0;
+}
+
+.rating span {
+  color: #f0c040;
+  margin: 0.1rem;
+}
+
+.rating span:last-child { /* targets the last element with class rating that is enclosed in a span tag */
+  color: #0C0404;
+}
+
+/* Alert */
+
+.loading {
+  display: block !important;
+}
+.success {
+  color: #20a020;
+}
+
+.danger {
+  color: #a02020;
+}
+
+.alert {
+  padding: 1rem;
+  border: 0.1rem solid transparent;
+  border-radius: 0.5rem;
+}
+
+.alert-info {
+  color: #2020a0;
+  background-color: #e0e0ff;
+}
+
+.alert-danger {
+  color: #a02020;
+  background-color: #ffe0e0e0;
+}
+
+.alert-success {
+  color: #20a020;
+  background-color: #eeffe0;
+}
+
+/* Form */
+.form {
+  max-width: 60rem;
+  margin: 0 auto; /* Center align the form */
+}
+
+.form > div {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
+.form label {
+  margin: 1rem 0; /* Creates a space between label and input box */
+}
+
+/* Dropdown */
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.dropdown-content{
+  position: absolute;
+  display: none;
+  right: 0;
+  min-width: 12rem;
+  padding: 1rem;
+  z-index: 1; /*  set to top */
+  background-color:#203040;
+  margin: 0;
+  margin-top: 0.4rem;
+  border-radius: 0.5rem;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block; /* Allows us to see the content of the dropdown when mouse hovers over it */
+}
+
+/* Checkout Steps */
+.checkout-steps > div { /* target the direct divs of checkout steps*/
+  border-top: 0.3rem #c0c0c0 solid;
+  color: #c0c0c0;
+  flex: 1;
+  padding: 1rem;
+}
+
+.checkout-steps > div.active {
+  border-top-color: #f08000;
+  color: #f08000;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table tbody tr:nth-of-type(odd) { /* targets every odd row in the table */
+  background-color: #f4f4f4;
+}
+
+.table td,
+.table th {
+  text-align: left;
+  border: 0.1rem solid #e4e4e4;
+  padding: 0.5rem;
+}
+
+.table button {
+  margin: 0 0.2rem;
+}
+
+/* Carousel */
+.carousel .slide img {
+  max-width: 30rem;
+}
+
+/* Search Box */
+
+.search button {
+  border-radius: 0 0.5rem  0.5rem 0;
+  border-right: none;
+  margin-right: 0.4rem;
+  margin-left: 0;
+}
+
+.search input {
+  border-radius: 0.5rem 0 0 0.5rem;
+  border-right: none;
+  margin-right: 0;
+  width: 50rem;
+  height: auto;
+}
+
+/* Aside */
+aside {
+  position: fixed;
+  width: 30rem;
+  height: 100%;
+  background-color: #efefef;
+  z-index: 1000;
+  transform: translateX(-30rem);
+  transition: all 0.6s; 
+}
+
+aside.open {
+  transform: translateX(0);
+}
+
+button.open-sidebar {
+  font-size: 3rem;
+  padding: 0.2rem 0.5rem;
+  margin: 0 0.5rem;
+  background: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button.open-sidebar:hover {
+  border-color: #ffffff;
+}
+
+aside ul {
+  padding: 0;
+  list-style: none;
+}
+
+aside li {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+button.close-sidebar {
+  padding: 0.3rem 0.8rem;
+}
+
+.active {
+  font-weight: bold;
+}
