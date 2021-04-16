@@ -22,19 +22,21 @@ export default function RegisterScreen(props) {
     const dispatch = useDispatch();
 
     const submitHandler = (event) => {
-        event.preventDefault(); // Prevents page from refreshing and prevents post back to another page
+        // Prevents page from refreshing and prevents post back to another page
+        event.preventDefault(); 
 
         if(password !== confirmPassword)
             alert("Passwords do not match!");
-        else
+        else {
             dispatch(register(name, email, password, isSeller));
+        }   
     };
 
     useEffect(() => {
         if(userInfo)
             props.history.push(redirect);
     }, [props.history, redirect, userInfo]);
-
+    
     return (
         <div>
             <form className="form" onSubmit={submitHandler}>
@@ -106,7 +108,7 @@ export default function RegisterScreen(props) {
                     <label />
                     <div>
                         Already have an account? {" "}
-                        <Link to={`/signin?redirect=${redirect}`}>Sign In</Link>
+                        <Link to={ `/signin?redirect=${redirect}`} >Sign In</Link>
                     </div>
                 </div>
             </form>

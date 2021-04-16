@@ -15,11 +15,12 @@ export default function SearchScreen(props) {
         min = 0, 
         max = 0, 
         rating = 0,
-        order = "newest" 
+        order = "newest",
+        pageNumber = 1, 
     } = useParams();
 
     const productList = useSelector((state) => state.productList);
-    const { loading, error, products } = productList;
+    const { loading, error, products, page, pages } = productList;
 
     const productCategoryList = useSelector((state) => state.productCategoryList);
     const { loading: loadingCategories, error: errorCategories, categories } = productCategoryList;
@@ -33,9 +34,10 @@ export default function SearchScreen(props) {
             min,
             max,
             rating,
-            order
+            order,
+            pageNumber
         }));
-    }, [dispatch, name, category, min, max, rating, order]);
+    }, [dispatch, name, category, min, max, rating, order, pageNumber]);
 
     const getFilterUrl = (filter) => {
         const filterCategory = filter.category || category;
@@ -44,7 +46,8 @@ export default function SearchScreen(props) {
         const filterRating = filter.rating ? filter.rating : filter.rating === 0 ? 0 : rating;
         const filterMin = filter.min ? filter.min : filter.min === 0 ? 0 : min;
         const filterMax = filter.max ? filter.max : filter.max === 0 ? 0 : max;
-        return `/search/category/${filterCategory}/name/${filterName}/min/${filterMin}/max/${filterMax}/rating/${filterRating}/order/${sortOrder}`;
+        const filterPage = filter.page || pageNumber;
+        return `/search/category/${filterCategory}/name/${filterName}/min/${filterMin}/max/${filterMax}/rating/${filterRating}/order/${sortOrder}/pageNumber/${filterPage}`;
     };
 
     return (
@@ -162,7 +165,20 @@ export default function SearchScreen(props) {
                                 ></Product>
                             ))
                         }
-                        </div>  
+                        </div> 
+
+                        <div className="row center pagination">
+                            {
+                                [...Array(pages).keys()].map((pageNum) => (
+                                    <Link 
+                                        className={ pageNum + 1 === page ? "active" : ""}
+                                        key={pageNum + 1}
+                                        to={getFilterUrl({ page: pageNum + 1 })}
+                                    >   {pageNum + 1}   
+                                    </Link>
+                                ))
+                            }
+                        </div> 
                     </>
                 }
                 </div>

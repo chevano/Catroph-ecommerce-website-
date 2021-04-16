@@ -10,7 +10,9 @@ import PrivateRoute from './components/PrivateRoute';
 import SearchBox from './components/SearchBox';
 import SellerRoute from './components/SellerRoute';
 import CartScreen from './screens/CartScreen';
+import DashboardScreen from './screens/DashboardScreen';
 import HomeScreen from './screens/HomeScreen';
+import MapScreen from './screens/MapScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import OrderScreen from './screens/OrderScreen';
@@ -28,7 +30,7 @@ import SigninScreen from './screens/SigninScreen';
 import UserEditScreen from './screens/UserEditScreen';
 import UserListScreen from './screens/UserListScreen';
 
-function App() {
+function App(props) {
 
     const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
     // Get Access to cartItems from redux store
@@ -105,7 +107,7 @@ function App() {
 
                                 <li>
                                     <Link 
-                                        to="#signout" 
+                                        to="/" 
                                         onClick={signoutHandler}
                                     > Sign Out
                                     </Link>
@@ -216,17 +218,19 @@ function App() {
             <Route path="/order/:id" component={OrderScreen}></Route>
             <Route path="/orderhistory" component={OrderHistoryScreen}></Route>
             <PrivateRoute path="/profile" component={ProfileScreen}></PrivateRoute>
+            <PrivateRoute path="/map" component={MapScreen}></PrivateRoute>
             <AdminRoute path="/productList" component={ProductListScreen} exact></AdminRoute>
             <AdminRoute path="/orderList" component={OrderListScreen} exact></AdminRoute>
             <AdminRoute path="/userList" component={UserListScreen}></AdminRoute>
             <AdminRoute path="/user/:id/edit" component={UserEditScreen}></AdminRoute>
+            <AdminRoute path="/dashboard" component={DashboardScreen}></AdminRoute> 
             <SellerRoute path="/productList/seller" component={ProductListScreen}></SellerRoute>
             <SellerRoute path="/orderList/seller" component={OrderListScreen}></SellerRoute>
             <Route path="/" component={HomeScreen} exact></Route>
             <Route path="/search/name/:name?" component={SearchScreen} exact></Route>
             <Route path="/search/category/:category" component={SearchScreen} exact></Route>
             <Route path="/search/category/:category/name/:name" component={SearchScreen} exact></Route>
-            <Route path="/search/category/:category/name/:name/min/:min/max/:max/rating/:rating/order/:order" component={SearchScreen} exact></Route>
+            <Route path="/search/category/:category/name/:name/min/:min/max/:max/rating/:rating/order/:order/pageNumber/:pageNumber" component={SearchScreen} exact></Route>
         </main>
 
         <footer className="row center">

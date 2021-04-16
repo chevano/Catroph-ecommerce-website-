@@ -21,7 +21,7 @@ import {
     userUpdateProfileReducer,
     userDeleteReducer, 
     userUpdateReducer, 
-    userTopSellerListReducer
+    userTopSellerListReducer, userAddressMapReducer
 } from './reducers/userReducers';
 
 import { 
@@ -32,6 +32,7 @@ import {
     orderListReducer, 
     orderMineListReducer, 
     orderPayReducer,
+    orderSummaryReducer,
 } from './reducers/orderReducers';
 
 import thunk from 'redux-thunk';
@@ -78,6 +79,8 @@ const reducer = combineReducers({
     userList: userListReducer,
     userDelete: userDeleteReducer,
     userTopSellersList: userTopSellerListReducer,
+    userAddressMap: userAddressMapReducer,
+    orderSummary: orderSummaryReducer
 });
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
