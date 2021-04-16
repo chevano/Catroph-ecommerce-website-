@@ -11,12 +11,7 @@ const orderRouter = express.Router();
 orderRouter.get("/", isAuth, isSellerOrAdmin, expressAsyncHandler(async (req, res) => {
     const seller = req.query.seller || "";
     const sellerFilter = seller ? { seller } : {};
-    // .find({...sellerFilter}) returns all the orders in the database(Order)
-    // if user is not a seller otherwise it returns all the orders of the current seller
-    // .populate("user",name) goes to the user field inside Order
-    // and retrieves the name field info inside user database (User)
-    // In the end, the complete statement will attach a user.name field inside orders
-    // const orders = await Order.find({ ...sellerFilter}).populate('user', 'name');
+ 
     const orders = await Order.find({ ...sellerFilter}).populate('user');
     res.send(orders); 
 }));
@@ -27,7 +22,7 @@ orderRouter.get("/mine", isAuth, expressAsyncHandler(async(req, res) => {
     res.send(orders);
 }));
 
-// Does calculating using aggregate functions
+// Does calculation using aggregate functions
 // Refer to mongodb docs for more info
 orderRouter.get("/summary", isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
     const orders = await Order.aggregate([
@@ -95,9 +90,7 @@ orderRouter.post("/", isAuth, expressAsyncHandler(async (req, res) => {
     }
 }));
 
-// Is the api for getting the details of an order
-// Recall the prefix is "/api/orders" defined in server.js
-// Only authenticated users can see order details
+// Is the api for getting the details of a particular order
 orderRouter.get("/:id", isAuth, expressAsyncHandler(async (req, res) => {
     // Retrieves order from the database
     const order = await Order.findById(req.params.id);
