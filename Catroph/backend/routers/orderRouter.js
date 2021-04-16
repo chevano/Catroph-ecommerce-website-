@@ -1,7 +1,10 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
-import { isAdmin, isAuth, isSellerOrAdmin } from '../utils.js';
+import { isAdmin, isAuth, isSellerOrAdmin, payOrderEmailTemplate, mailgun } from '../utils.js';
 import Order from '../models/orderModel.js'
+import User from '../models/userModel.js';
+import Product from '../models/productModel.js';
+
 
 const orderRouter = express.Router();
 
@@ -24,6 +27,52 @@ orderRouter.get("/mine", isAuth, expressAsyncHandler(async(req, res) => {
     res.send(orders);
 }));
 
+// Does calculating using aggregate functions
+// Refer to mongodb docs for more info
+orderRouter.get("/summary", isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+    const orders = await Order.aggregate([
+        {
+            $group: {
+                _id: null, 
+                numOrders: {$sum: 1}, // counts the number of orders in Order db
+                totalSales: { $sum: "$totalPrice"}
+            }
+        }
+    ]);
+
+    const users = await User.aggregate([
+        {
+            $group: {
+                _id: null, 
+                numUsers: {$sum: 1},
+            }
+        }
+    ]);
+
+    const dailyOrders = await Order.aggregate([
+        {
+            $group: {
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt"} },
+                orders: { $sum: 1},
+                sales: { $sum: "$totalPrice"}
+            }
+        },
+        {
+            $sort: { _id: 1}
+        }
+    ]);
+
+    const productCategories = await Product.aggregate([
+        {
+            $group: {
+                _id: "$category",
+                count: { $sum: 1}
+            }
+        }
+    ]);
+
+    res.send({ orders, users, dailyOrders, productCategories })
+}));
 orderRouter.post("/", isAuth, expressAsyncHandler(async (req, res) => {
     // Check if user forgot to add items to the shopping cart
     if(req.body.orderItems.length === 0) 
@@ -62,7 +111,7 @@ orderRouter.get("/:id", isAuth, expressAsyncHandler(async (req, res) => {
 
 // Update the status of an order
 orderRouter.put("/:id/pay", isAuth, expressAsyncHandler(async(req, res) => {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate("user", "email name");
 
     if(order) {
         order.isPaid = true;
@@ -74,6 +123,19 @@ orderRouter.put("/:id/pay", isAuth, expressAsyncHandler(async(req, res) => {
             email_address: req.body.payer.email_address,
         };
         const updateOrder = await order.save();
+        await mailgun().messages().send({
+            from: `Catroph <catroph@mg.yourdomain.com>`,
+            to: `${order.user.name} <${order.user.email}>`,
+            subject: `Order ${order._id}`,
+            html: payOrderEmailTemplate(order),
+        }, 
+        (error, body) => {
+            if(error)
+                console.log(error);
+            else
+                console.log(body);
+        });
+
         res.send({ message: "Order Paid", order: updateOrder });
     }
     else
