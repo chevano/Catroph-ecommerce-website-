@@ -1,7 +1,6 @@
 import express from 'express';
 import Product from '../models/productModel.js';
 import data from '../data.js';
-import mongoose from 'mongoose';
 // middleware for handling exceptions inside of async express 
 // routes and passing them to your express error handlers
 import expressAsyncHandler from 'express-async-handler';
@@ -12,21 +11,28 @@ import User from '../models/userModel.js';
 const productRouter = express.Router();
 
 productRouter.get("/seed", expressAsyncHandler(async (req,res) => {
-    const seller = await User.findOne({ isSeller: true });
-    if(seller) {
-        const products = data.products.map((product) => ({
-            ...product,
-            seller: seller._id
-        }));
-        // populates the Product database then send to frontend
-        const createdProducts = await Product.insertMany(products);
-        res.send({ createdProducts });
-    }
-    else
-        res.status(500).send({ message: "No seller found. First run /api/users/seed"})
+    let sellerExist = true;
+    let products = {};
+
+    while(sellerExist) {
+        const seller = await User.findOne({ isSeller: true });
+
+        if(seller) {
+            products = data.products.map((product) => ({
+                ...product,
+                seller: seller._id
+            }));
+        }
+        sellerExist = false;
+    } 
+
+    const createdProducts = await Product.insertMany(products);
+    res.send({ createdProducts });
 }));
 
 productRouter.get("/", expressAsyncHandler(async (req, res) => {
+    const pageSize = 5; // The number of products per page
+    const page = Number(req.query.pageNumber) || 1;
     const min = req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0;
     const max = req.query.max && Number(req.query.max) !== 0 ? Number(req.query.max) : 0;
     const rating = req.query.rating && Number(req.query.rating) !== 0 ? Number(req.query.rating) : 0;
@@ -47,9 +53,19 @@ productRouter.get("/", expressAsyncHandler(async (req, res) => {
         order === "highest" ? {price: -1}
         :
         order === "toprated" ? {rating: -1}
-        : {_id: -1}
+        : {_id: -1};
+
+    // Returns the number of matching documents in the database
+    const count = await Product.countDocuments({ 
+        ...sellerFilter, 
+        ...nameFilter, 
+        ...categoryFilter, 
+        ...priceFilter, 
+        ...ratingFilter 
+    });
+
     // returns all the products in the database(Product) if filter is empty
-    // otherwise it will return the products of the current seller
+    // otherwise it will return the products of the current seller for sellerFilter
     const products = await Product.find({ 
         ...sellerFilter, 
         ...nameFilter, 
@@ -57,16 +73,18 @@ productRouter.get("/", expressAsyncHandler(async (req, res) => {
         ...priceFilter, 
         ...ratingFilter 
     }).populate({path: 'seller', model: 'User'})
-    .sort(sortOrder);
+    .sort(sortOrder)
+    .skip(pageSize * (page - 1)) // Goes to the selected page
+    .limit(pageSize); // displays pageSize products per page
 
-    res.send(products);
+    res.send({ products, page, pages: Math.ceil(count / pageSize) });
 }));
 
 // Returns all distinct products by their category
 productRouter.get("/categories", expressAsyncHandler(async (req, res) => {
     const categories = await Product.find().distinct("category");
     res.send(categories);
-}))
+}));
 
 // Create Products for admin users at /api/products/
 productRouter.post("/", isAuth, isSellerOrAdmin, expressAsyncHandler(async (req, res) => {
@@ -102,9 +120,9 @@ productRouter.put("/:id", isAuth, isSellerOrAdmin, expressAsyncHandler(async (re
 
     // Updates product with the values user entered from frontend
     if(product) {
-        const seller = mongoose.Types.ObjectId(req.params.seller);
-        product.seller = seller;
-        // product.seller = req.user._id;
+        // const seller = mongoose.Types.ObjectId(req.params.seller);
+        // product.seller = seller;
+        //product.seller = req.user._id;
         product.name = req.body.name;
         product.price = req.body.price;
         product.image = req.body.image;
