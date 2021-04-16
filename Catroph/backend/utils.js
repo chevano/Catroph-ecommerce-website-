@@ -70,7 +70,7 @@ export const isSellerOrAdmin = (req, res, next) => {
 };
 
 export const mailgun = () => mg({
-    apiKey: process.env.MAILGUN_API_KEY,
+	apiKey: process.env.MAILGUN_API_KEY,
 	domain: process.env.MAILGUN_DOMAIN,
 });
 
@@ -139,7 +139,5 @@ export const payOrderEmailTemplate = (order) => {
         </p>
 
         <hr/>
-
-        <p>Thanks for shopping with us.</p>
         `
 };
