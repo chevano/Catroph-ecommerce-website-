@@ -31,6 +31,11 @@ app.get("/api/config/paypal", (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID || "sb");
 });
 
+app.get("/api/config/google", (req, res) => {
+    res.send(process.env.GOOGLE_API_KEY || "") 
+});
+
+
 // returns the absolute path of the current working directory
 const __dirname = path.resolve();
 
